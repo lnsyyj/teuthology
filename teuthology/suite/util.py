@@ -65,7 +65,7 @@ def schedule_fail(message, name=''):
         msg['To'] = email
         try:
             smtp = smtplib.SMTP('localhost')
-            smtp.sendmail(msg['From'], [msg['To']], msg.as_string())
+            smtp.sendmail(msg['From'], msg['To'].split(','), msg.as_string())
             smtp.quit()
         except socket.error:
             log.exception("Failed to connect to mail server!")
