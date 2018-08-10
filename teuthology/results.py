@@ -114,7 +114,7 @@ def email_results(subject, from_, to, body):
     msg['To'] = to
     log.debug('sending email %s', msg.as_string())
     smtp = smtplib.SMTP('localhost')
-    smtp.sendmail(msg['From'], [msg['To']], msg.as_string())
+    smtp.sendmail(msg['From'], msg['To'].split(','), msg.as_string())
     smtp.quit()
 
 
