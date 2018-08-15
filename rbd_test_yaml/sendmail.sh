@@ -10,4 +10,4 @@ function activate() {
 
 activate
 teuthology-results --email yujiang2@lenovo.com --timeout 1 --archive-dir /home/teuthworker/archive --name "${DATA}-RBD" --subset rbd --seed 1
-teuthology-results --email yujiang2@lenovo.com --timeout 1 --archive-dir /home/teuthworker/archive --name "${DATA}-RADOS" --subset rados --seed 1
+#teuthology-results --email yujiang2@lenovo.com --timeout 1 --archive-dir /home/teuthworker/archive --name "${DATA}-RADOS" --subset rados --seed 1
