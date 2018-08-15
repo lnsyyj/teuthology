@@ -4,8 +4,8 @@ set -x
 DATA=$(date +%Y-%m-%d)
 SUITE="RBD"
 echo ${DATA}
-activate () {
-  source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate
+function activate() {
+	source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate
 }
 
 #su - paddles -c "source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate"
