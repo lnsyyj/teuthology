@@ -5,7 +5,7 @@ DATA=$(date +%Y-%m-%d)
 SUITE="RBD"
 #FILE_LIST=(import_export.yaml verify_pool.yaml diff_continuous.yaml copy.yaml concurrent.yaml)
 
-FILE_LIST=(import_export.yaml verify_pool.yaml)
+FILE_LIST=(verify_pool.sh.yaml cli_generic.sh.yaml concurrent.sh.yaml diff_continuous.sh.yaml diff.sh.yaml huge-tickets.sh.yaml image_read.sh.yaml import_export.sh.yaml issue-20295.sh.yaml journal.sh.yaml kernel.sh.yaml krbd_data_pool.sh.yaml krbd_exclusive_option.sh.yaml krbd_fallocate.sh.yaml krbd_stable_pages_required.sh.yaml map-snapshot-io.sh.yaml map-unmap.sh.yaml merge_diff.sh.yaml notify_master.sh.yaml permissions.sh.yaml qemu_dynamic_features.sh.yaml qemu-iotests.sh.yaml qemu_rebuild_object_map.sh.yaml rbd-ggate.sh.yaml rbd_mirror_ha.sh.yaml rbd_mirror_helpers.sh.yaml rbd_mirror.sh.yaml rbd_mirror_stress.sh.yaml rbd-nbd.sh.yaml read-flags.sh.yaml run_devstack_tempest.sh.yaml simple_big.sh.yaml smalliobench.sh.yaml test_admin_socket.sh.yaml test_librbd_api.sh.yaml test_librbd_python.sh.yaml test_librbd.sh.yaml test_lock_fence.sh.yaml test_rbdmap_RBDMAPFILE.sh.yaml test_rbd_mirror.sh.yaml)
 
 function activate() {
 	source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate
@@ -14,16 +14,16 @@ function activate() {
 activate
 pushd /home/teuthology/src/teuthology_master/rbd_test_yaml/
 
-#for file_name in ${FILE_LIST[@]}
-#do
-#	teuthology-schedule --name "${DATA}-${SUITE}" ${file_name}
-#done
+for file_name in ${FILE_LIST[@]}
+do
+	teuthology-schedule --name "${DATA}-${SUITE}" ${file_name}
+done
 
 #teuthology-schedule --name "${DATA}-${SUITE}" import_export.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" verify_pool.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" diff_continuous.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" copy.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" concurrent.yaml
-teuthology-schedule --name "${DATA}-${SUITE}" run_cli_tests.sh.yaml
+#teuthology-schedule --name "${DATA}-${SUITE}" run_cli_tests.sh.yaml
 
 popd
