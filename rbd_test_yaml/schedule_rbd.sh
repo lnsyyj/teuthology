@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-DATA=$(date +%Y-%m-%d)
+DATA=$(date +%Y%m%d)
 SUITE="RBD"
 #FILE_LIST=(import_export.yaml verify_pool.yaml diff_continuous.yaml copy.yaml concurrent.yaml)
 
