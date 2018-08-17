@@ -14,15 +14,16 @@ function activate() {
 activate
 pushd /home/teuthology/src/teuthology_master/rbd_test_yaml/
 
-for file_name in ${FILE_LIST[@]}
-do
-	teuthology-schedule --name "${DATA}-${SUITE}" ${file_name}
-done
+#for file_name in ${FILE_LIST[@]}
+#do
+#	teuthology-schedule --name "${DATA}-${SUITE}" ${file_name}
+#done
 
 #teuthology-schedule --name "${DATA}-${SUITE}" import_export.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" verify_pool.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" diff_continuous.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" copy.yaml
 #teuthology-schedule --name "${DATA}-${SUITE}" concurrent.yaml
+teuthology-schedule --name "${DATA}-${SUITE}" run_cli_tests.sh.yaml
 
 popd
