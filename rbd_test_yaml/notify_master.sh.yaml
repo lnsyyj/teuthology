@@ -11,7 +11,7 @@ tasks:
 - exec:
     client.0:
       - sudo python /root/clear_pools.py
-      - sudo /root/ceph-10.2.7/qa/workunits/rbd/notify_master.sh
+      - sudo /root/ceph-10.2.7/qa/workunits/rbd/notify_slave.sh & sudo /root/ceph-10.2.7/qa/workunits/rbd/notify_master.sh
 
 overrides:
   selinux:
