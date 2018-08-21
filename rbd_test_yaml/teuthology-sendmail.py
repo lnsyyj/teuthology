@@ -92,36 +92,20 @@ Please find the CICD pipeline report for this build below: {{product_version}}
              <li><b>Teuthology Automation Test Summary</b></li><br/><br/>
              <p style="margin-left: 15px">
              <table class="gridtable">
-                 % for casename, total, passed, running, fail, unknown, waiting, queued, dead, logs in items:
-                 <tr>
-                     <td>Test Plan Name</td><td>{{casename}}</td>
+                <tr>
+                     <th style="font-weight:bold">Suite</th>
+                     <th style="font-weight:bold">Pass</th>
+                     <th style="font-weight:bold">Fail</th>
+                     <th style="font-weight:bold">Unknown</th>
+                     <th style="font-weight:bold">logs</th>
                  </tr>
+                 % for casename, passed, fail, unknown, logs in items:
                  <tr>
-                     <td>Total</td><td>{{total}}</td>
-                 </tr>
-                 <tr>
-                     <td>Passed</td><td>{{passed}}</td>
-                 </tr>
-                 <tr>
-                     <td>Running</td><td>{{running}}</td>
-                 </tr>
-                 <tr>
-                     <td>Failed</td><td>{{fail}}</td>
-                 </tr>
-                 <tr>
-                     <td>Unknown</td><td>{{unknown}}</td>
-                 </tr>
-                 <tr>
-                     <td>Waiting</td><td>{{waiting}}</td>
-                 </tr>
-                 <tr>
-                     <td>Queued</td><td>{{queued}}</td>
-                 </tr>
-                 <tr>
-                     <td>Dead</td><td>{{dead}}</td>
-                 </tr>
-                 <tr>
-                     <td>Logs</td><td>{{logs}}</td>
+                     <td>{{casename}}</td>
+                     <td>{{passed}}</td>
+                     <td>{{fail}}</td>
+                     <td>{{unknown}}</td>
+                     <td>{{logs}}</td>
                  </tr>
                  %end
              </table>
@@ -140,7 +124,6 @@ Please find the CICD pipeline report for this build below: {{product_version}}
              </p>
              </br>
 
-
 <p><font color="gray" size="2px">
 Best Regards,<br/>
 CloudTest Team<br/>
@@ -154,7 +137,9 @@ CloudTest Team<br/>
 def filled_email_template(email_template, deployments, teuthology_result, log_url, product_version, sds_pkg_url, new_patch_list):
 	s = json.loads(teuthology_result)
 	# casename, total, pass, running, fail, unknown, waiting, queued, dead, info, logs 
-	email_items = [(s["name"], s["results"]["total"], s["results"]["pass"], s["results"]["running"], s["results"]["fail"], s["results"]["unknown"], s["results"]["waiting"], s["results"]["queued"], s["results"]["dead"], log_url)]
+	# email_items = [(s["name"], s["results"]["total"], s["results"]["pass"], s["results"]["running"], s["results"]["fail"], s["results"]["unknown"], s["results"]["waiting"], s["results"]["queued"], s["results"]["dead"], log_url)]
+	unknown = int(s["results"]["total"]) - int(s["results"]["pass"]) - int(s["results"]["fail"])
+	email_items = [(s["name"], s["results"]["pass"], s["results"]["fail"], unknown, log_url)]
 	html = template(email_template, deployments=[(deployments)], product_version=product_version, items=email_items, build_location=sds_pkg_url + product_version, new_patch_list=[new_patch_list])
 	return html
 
@@ -164,11 +149,16 @@ def email_results(subject, from_, to, body):
 	msg['From'] = from_
 	msg['To'] = to
 	smtp = smtplib.SMTP('localhost')
-	smtp.sendmail(msg['From'], [msg['To']], msg.as_string())
+	smtp.sendmail(msg['From'], msg['To'].split(','), msg.as_string())
 	smtp.quit()
 
 def get_teuthology_result(url):
-	r = requests.get(url)
+	while True:
+		r = requests.get(url)
+		time.sleep(5)
+		s = json.loads(r.text)
+		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
+			break
 	return r.text
 
 def get_sds_build_info(url, data_time):
@@ -184,23 +174,17 @@ def get_sds_new_patch_list(url):
 	r = requests.get(url)
 	return r.text
 
-# def get_sds_code_mainfest(url):
-# 	r = requests.get(url)
-# 	print r.text
-	# return r.text
-
 if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
 	paddles_url = "http://10.100.46.205:8080/runs/" + data_time + "-RBD"
 	log_url = "http://10.100.46.205/" + data_time + "-RBD"
 	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/tcs_nfvi_centos7.5/"
 	sds_controller_url = "http://10.100.47.169"
-	# sds_code_mainfest_url = "http://gitlab.lenovo.com/thinkcloud-sds/manifests/tree/master/tcs_nfvi_centos7.5/daily/"
-	# sds_code_mainfest = get_sds_code_mainfest(sds_code_mainfest_url)
 
 	sds_build_pkg_name = get_sds_build_info(sds_pkg_url, data_time)
-	new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
+	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
 
 	teuthology_result = get_teuthology_result(paddles_url)
-	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, log_url, sds_build_pkg_name, sds_pkg_url, new_patch_list)
+	print teuthology_result
+	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, log_url, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
