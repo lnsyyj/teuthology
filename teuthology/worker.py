@@ -109,6 +109,7 @@ def main(ctx):
         log.info('Config is: %s', job.body)
         job_config = yaml.safe_load(job.body)
         job_config['job_id'] = str(job_id)
+        log.info('job_config is: %s', job_config)
 
         if job_config.get('stop_worker'):
             keep_running = False
