@@ -176,10 +176,10 @@ def get_sds_new_patch_list(url):
 
 if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
-	paddles_url = "http://10.100.46.205:8080/runs/" + data_time + "-RBD"
-	log_url = "http://10.100.46.205/" + data_time + "-RBD"
+	paddles_url = "http://10.121.8.93:8080/runs/" + data_time + "-RBD"
+	log_url = "http://10.121.8.93/" + data_time + "-RBD"
 	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/tcs_nfvi_centos7.5/"
-	sds_controller_url = "http://10.100.47.169"
+	sds_controller_url = "http://10.121.8.95"
 
 	sds_build_pkg_name = get_sds_build_info(sds_pkg_url, data_time)
 	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
@@ -187,4 +187,4 @@ if __name__ == '__main__':
 	teuthology_result = get_teuthology_result(paddles_url)
 	print teuthology_result
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, log_url, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
-	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
+	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
