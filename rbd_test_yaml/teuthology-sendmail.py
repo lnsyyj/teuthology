@@ -187,4 +187,5 @@ if __name__ == '__main__':
 	teuthology_result = get_teuthology_result(paddles_url)
 	print teuthology_result
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, log_url, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
-	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
+	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com", body=email_body)
+	#email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
