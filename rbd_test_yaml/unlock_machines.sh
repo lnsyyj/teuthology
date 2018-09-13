@@ -5,7 +5,7 @@ DATA=$(date +%Y-%m-%d)
 SUITE="RBD"
 echo ${DATA}
 MACHINES_TOTAL=4
-MACHINES_LIST=(plana003.test.com plana004.test.com plana005.test.com plana006.test.com)
+MACHINES_LIST=(plana003.test.lenovo.com plana004.test.lenovo.com plana005.test.lenovo.com plana006.test.lenovo.com)
 
 function activate() {
 	source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate
