@@ -11,7 +11,8 @@ tasks:
 - exec:
     client.0:
       - sudo python /root/clear_pools.py
-      - export RBD_FEATURES=3;sudo /root/ceph-10.2.7/qa/workunits/rbd/test_librbd_api.sh
+      - sudo sleep 15
+      - sudo /bin/bash -c "export RBD_FEATURES=3;/root/ceph-10.2.7/qa/workunits/rbd/test_librbd_api.sh"
 
 overrides:
   selinux:

@@ -11,6 +11,7 @@ tasks:
 - exec:
     client.0:
       - sudo python /root/clear_pools.py
+      - sudo sleep 15
       - sudo /root/ceph-10.2.7/qa/workunits/rbd/simple_big.sh
 
 overrides:
