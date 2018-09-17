@@ -19,11 +19,6 @@ do
 	teuthology-schedule --name "${DATA}-${SUITE}" ${file_name}
 done
 
-for file_name in ${FILE_LIST[@]}
-do
-        teuthology-schedule --name "${DATA}-${SUITE}" ${file_name}
-done
-
 #teuthology-schedule --name "${DATA}-${SUITE}" verify_pool.yaml
 
 popd
