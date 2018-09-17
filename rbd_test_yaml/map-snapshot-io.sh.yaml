@@ -1,4 +1,4 @@
-eck-locks: false
+check-locks: false
 use_existing_cluster: true
 
 roles:
