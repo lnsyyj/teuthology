@@ -99,13 +99,13 @@ Please find the CICD pipeline report for this build below: {{product_version}}
                      <th style="font-weight:bold">Unknown</th>
                      <th style="font-weight:bold">logs</th>
                  </tr>
-                 % for casename, passed, fail, unknown, logs in items:
+                 % for i in range(len(items)):
                  <tr>
-                     <td>{{casename}}</td>
-                     <td>{{passed}}</td>
-                     <td>{{fail}}</td>
-                     <td>{{unknown}}</td>
-                     <td>{{logs}}</td>
+                     <td>{{items[i][0]}}</td>
+                     <td>{{items[i][1]}}</td>
+                     <td>{{items[i][2]}}</td>
+                     <td>{{items[i][3]}}</td>
+                     <td>{{items[i][4]}}</td>
                  </tr>
                  %end
              </table>
@@ -134,13 +134,8 @@ CloudTest Team<br/>
 
  """
 
-def filled_email_template(email_template, deployments, teuthology_result, log_url, product_version, sds_pkg_url, new_patch_list):
-	s = json.loads(teuthology_result)
-	# casename, total, pass, running, fail, unknown, waiting, queued, dead, info, logs 
-	# email_items = [(s["name"], s["results"]["total"], s["results"]["pass"], s["results"]["running"], s["results"]["fail"], s["results"]["unknown"], s["results"]["waiting"], s["results"]["queued"], s["results"]["dead"], log_url)]
-	unknown = int(s["results"]["total"]) - int(s["results"]["pass"]) - int(s["results"]["fail"])
-	email_items = [(s["name"], s["results"]["pass"], s["results"]["fail"], unknown, log_url)]
-	html = template(email_template, deployments=[(deployments)], product_version=product_version, items=email_items, build_location=sds_pkg_url + product_version, new_patch_list=[new_patch_list])
+def filled_email_template(email_template, deployments, teuthology_result, product_version, sds_pkg_url, new_patch_list):
+	html = template(email_template, deployments=[(deployments)], product_version=product_version, items=teuthology_result, build_location=sds_pkg_url + product_version, new_patch_list=[new_patch_list])
 	return html
 
 def email_results(subject, from_, to, body):
@@ -152,14 +147,17 @@ def email_results(subject, from_, to, body):
 	smtp.sendmail(msg['From'], msg['To'].split(','), msg.as_string())
 	smtp.quit()
 
-def get_teuthology_result(url):
+def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
 		time.sleep(5)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
 			break
-	return r.text
+	result = json.loads(r.text)
+	unknown = int(result["results"]["total"]) - int(result["results"]["pass"]) - int(result["results"]["fail"])
+	email_items = [(result["name"], result["results"]["pass"], result["results"]["fail"], unknown, log_url)]
+	return email_items
 
 def get_sds_build_info(url, data_time):
 	r = requests.get(url)
@@ -176,16 +174,18 @@ def get_sds_new_patch_list(url):
 
 if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
-	paddles_url = "http://10.121.8.93:8080/runs/" + data_time + "-RBD"
-	log_url = "http://10.121.8.93/" + data_time + "-RBD"
+	paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-RBD"
+	paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-RADOS"
+	rbd_log_url = "http://10.121.8.93/" + data_time + "-RBD"
+	rados_log_url = "http://10.121.8.93/" + data_time + "-RADOS"
 	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/tcs_nfvi_centos7.5/"
 	sds_controller_url = "http://10.121.8.95"
 
 	sds_build_pkg_name = get_sds_build_info(sds_pkg_url, data_time)
 	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
+	teuthology_rbd_result = get_teuthology_result(paddles_rbd_url, rbd_log_url)
+	teuthology_rados_result = get_teuthology_result(paddles_rados_url, rados_log_url)
+	teuthology_result = teuthology_rbd_result + teuthology_rados_result
 
-	teuthology_result = get_teuthology_result(paddles_url)
-	print teuthology_result
-	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, log_url, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
+	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com", body=email_body)
-	#email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
