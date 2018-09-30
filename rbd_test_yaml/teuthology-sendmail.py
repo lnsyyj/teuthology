@@ -161,7 +161,7 @@ def get_teuthology_result(url, log_url):
 
 def get_sds_build_info(url, data_time):
 	r = requests.get(url)
-	pattern = "deployment-standalone-daily_" + data_time + "_[0-9]*\.tar\.gz"
+	pattern = "ThinkCloud-SDS-2.0.2-daily_" + data_time + "_[0-9]*\.tar\.gz"
 	match_obj = re.findall(pattern, r.text, flags=0)
 	if match_obj:
 		return match_obj[0]
