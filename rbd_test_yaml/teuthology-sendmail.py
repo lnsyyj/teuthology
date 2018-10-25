@@ -150,7 +150,7 @@ def email_results(subject, from_, to, body):
 def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
-		time.sleep(5)
+		time.sleep(20)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
 			break
@@ -176,8 +176,10 @@ if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
 	paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-RBD"
 	paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-RADOS"
+	paddles_ceph_test_url = "http://10.121.8.93:8080/runs/" + data_time + "-CEPH_TEST"
 	rbd_log_url = "http://10.121.8.93/" + data_time + "-RBD"
 	rados_log_url = "http://10.121.8.93/" + data_time + "-RADOS"
+	ceph_test_log_url = "http://10.121.8.93/" + data_time + "-CEPH_TEST"
 	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/release-2.0/"
 	sds_controller_url = "http://10.121.8.95"
 
@@ -185,7 +187,8 @@ if __name__ == '__main__':
 	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
 	teuthology_rbd_result = get_teuthology_result(paddles_rbd_url, rbd_log_url)
 	teuthology_rados_result = get_teuthology_result(paddles_rados_url, rados_log_url)
-	teuthology_result = teuthology_rbd_result + teuthology_rados_result
+	teuthology_ceph_test_result = get_teuthology_result(paddles_ceph_test_url, ceph_test_log_url)
+	teuthology_result = teuthology_rbd_result + teuthology_rados_result + teuthology_ceph_test_result
 
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	#email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
