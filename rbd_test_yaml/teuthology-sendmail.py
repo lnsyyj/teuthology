@@ -99,13 +99,33 @@ Please find the CICD pipeline report for this build below: {{product_version}}
                      <th style="font-weight:bold">Unknown</th>
                      <th style="font-weight:bold">logs</th>
                  </tr>
-                 % for i in range(len(items)):
+                 % for i in range(len(result_items)):
                  <tr>
-                     <td>{{items[i][0]}}</td>
-                     <td>{{items[i][1]}}</td>
-                     <td>{{items[i][2]}}</td>
-                     <td>{{items[i][3]}}</td>
-                     <td>{{items[i][4]}}</td>
+                     <td>{{result_items[i][0]}}</td>
+                     <td>{{result_items[i][1]}}</td>
+                     <td>{{result_items[i][2]}}</td>
+                     <td>{{result_items[i][3]}}</td>
+                     <td>{{result_items[i][4]}}</td>
+                 </tr>
+                 %end
+             </table>
+             </p>
+             </br>
+             </br>
+
+             <li><b>Teuthology Test Report</b></li><br/><br/>
+             <p style="margin-left: 15px">
+             <table class="gridtable">
+                <tr>
+                     <th style="font-weight:bold">Test items</th>
+                     <th style="font-weight:bold">Result</th>
+                     <th style="font-weight:bold">log</th>
+                 </tr>
+                 % for i in range(len(report_items)):
+                 <tr>
+                     <td>{{report_items[i][0]}}</td>
+                     <td>{{report_items[i][1]}}</td>
+                     <td>{{report_items[i][2]}}</td>
                  </tr>
                  %end
              </table>
@@ -134,8 +154,8 @@ CloudTest Team<br/>
 
  """
 
-def filled_email_template(email_template, deployments, teuthology_result, product_version, sds_pkg_url, new_patch_list):
-	html = template(email_template, deployments=[(deployments)], product_version=product_version, items=teuthology_result, build_location=sds_pkg_url + product_version, new_patch_list=[new_patch_list])
+def filled_email_template(email_template, deployments, teuthology_result, report_result, product_version, sds_pkg_url, new_patch_list):
+	html = template(email_template, deployments=[(deployments)], product_version=product_version, result_items=teuthology_result, report_items=report_result, build_location=sds_pkg_url + product_version, new_patch_list=[new_patch_list])
 	return html
 
 def email_results(subject, from_, to, body):
@@ -150,6 +170,7 @@ def email_results(subject, from_, to, body):
 def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
+        	#print r.text
 		time.sleep(20)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
@@ -158,6 +179,16 @@ def get_teuthology_result(url, log_url):
 	unknown = int(result["results"]["total"]) - int(result["results"]["pass"]) - int(result["results"]["fail"])
 	email_items = [(result["name"], result["results"]["pass"], result["results"]["fail"], unknown, log_url)]
 	return email_items
+
+def get_teuthology_report_result(url, job_list):
+	r = requests.get(url)
+	s = json.loads(r.text)
+	email_report_items = []
+	for index, value in enumerate(s["jobs"]):
+		if value["status"] == "fail":
+			email_report_items.append((job_list[index], value["status"], value["log_href"]))
+	print email_report_items
+	return email_report_items
 
 def get_sds_build_info(url, data_time):
 	r = requests.get(url)
@@ -185,11 +216,20 @@ if __name__ == '__main__':
 
 	sds_build_pkg_name = get_sds_build_info(sds_pkg_url, data_time)
 	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
-	teuthology_rbd_result = get_teuthology_result(paddles_rbd_url, rbd_log_url)
-	teuthology_rados_result = get_teuthology_result(paddles_rados_url, rados_log_url)
-	teuthology_ceph_test_result = get_teuthology_result(paddles_ceph_test_url, ceph_test_log_url)
-	teuthology_result = teuthology_rbd_result + teuthology_rados_result + teuthology_ceph_test_result
+	rbd_result_items = get_teuthology_result(paddles_rbd_url, rbd_log_url)
+	rados_result_items = get_teuthology_result(paddles_rados_url, rados_log_url)
+	ceph_test_result_items = get_teuthology_result(paddles_ceph_test_url, ceph_test_log_url)
+	teuthology_result_items = rbd_result_items + rados_result_items + ceph_test_result_items
+        #print teuthology_result
+	rbd_job_list = ["copy", "diff", "import_export", "journal", "permissions", "qemu-iotests", "rbd-nbd", "read-flags", "run_cli_tests", "smalliobench", "test_admin_socket", "test_librbd_python", "test_librbd", "test_rbdmap_RBDMAPFILE", "test_rbd_mirror", "verify_pool", "diff_continuous", "test_librbd_api", "notify_master", "test_lock_fence", "notify_slave", "merge_diff"]
+	rados_job_list = ["load-gen-big", "load-gen-mix", "load-gen-mix-small-long", "load-gen-mix-small", "load-gen-mostlyread", "stress_watch", "test_cache_pool", "test_pool_quota", "test_python", "test_rados_timeouts", "test_rados_tool", "test", "test_tmap_to_omap", "test-upgrade-v11.0.0"]
+	ceph_test_job_list = ["ceph_omapbench", "ceph_test_cls_lock", "ceph_test_cls_rgw", "ceph_test_mon_msg", "ceph_test_rados_api_cmd", "ceph_test_rados_api_nlist", "ceph_test_rados_striper_api_io", "ceph_perf_local", "ceph_test_cls_log", "ceph_test_cls_statelog", "ceph_test_msgr", "ceph_test_rados_api_c_read_operations", "ceph_test_rados_api_pool", "ceph_test_rados_watch_notify", "ceph_scratchtool", "ceph_test_cls_numops", "ceph_test_cls_version", "ceph_test_object_map", "ceph_test_rados_api_c_write_operations", "ceph_test_rados_delete_pools_parallel", "ceph_test_snap_mapper", "ceph_test_async_driver", "ceph_test_cls_rbd", "ceph_test_filejournal", "ceph_test_objectstore", "ceph_test_rados_api_list", "ceph_test_rados_list_parallel", "ceph_test_stress_watch", "ceph_test_cls_hello", "ceph_test_cls_refcount", "ceph_test_filestore", "ceph_test_rados_api_aio", "ceph_test_rados_api_lock", "ceph_test_rados_open_pools_parallel", "ceph_tpbench", "ceph_test_cls_journal", "ceph_test_cls_replica_log", "ceph_test_keyvaluedb", "ceph_test_rados_api_cls", "ceph_test_rados_api_misc", "ceph_test_rados_striper_api_aio", "ceph_test_mutate", "ceph_test_rados_api_io", "ceph_test_rados_api_snapshots", "ceph_test_rados_api_stat", "ceph_test_rados_api_tier", "ceph_test_rados_api_tmap_migrate", "ceph_test_rados_api_watch_notify", "ceph_test_rbd_mirror"]
+        rbd_result_report_items = get_teuthology_report_result(paddles_rbd_url, rbd_job_list)
+        rados_result_report_items = get_teuthology_report_result(paddles_rados_url, rados_job_list)
+        ceph_test_result_report_items = get_teuthology_report_result(paddles_ceph_test_url, ceph_test_job_list)
+	teuthology_result_report_items = rbd_result_report_items + rados_result_report_items + ceph_test_result_report_items
+        
 
-	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
+	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result_items, teuthology_result_report_items, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	#email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
 	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com", body=email_body)
