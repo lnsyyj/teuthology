@@ -93,6 +93,7 @@ Please find the CICD pipeline report for this build below: {{product_version}}
              <p style="margin-left: 15px">
              <table class="gridtable">
                 <tr>
+                     <th style="font-weight:bold">Suite ID</th>
                      <th style="font-weight:bold">Suite</th>
                      <th style="font-weight:bold">Pass</th>
                      <th style="font-weight:bold">Fail</th>
@@ -101,6 +102,7 @@ Please find the CICD pipeline report for this build below: {{product_version}}
                  </tr>
                  % for i in range(len(result_items)):
                  <tr>
+                     <td>{{i+1}}</td>
                      <td>{{result_items[i][0]}}</td>
                      <td>{{result_items[i][1]}}</td>
                      <td>{{result_items[i][2]}}</td>
@@ -117,12 +119,14 @@ Please find the CICD pipeline report for this build below: {{product_version}}
              <p style="margin-left: 15px">
              <table class="gridtable">
                 <tr>
+                     <th style="font-weight:bold">Report ID</th>
                      <th style="font-weight:bold">Test items</th>
                      <th style="font-weight:bold">Result</th>
                      <th style="font-weight:bold">log</th>
                  </tr>
                  % for i in range(len(report_items)):
                  <tr>
+                     <td>{{i+1}}</td>
                      <td>{{report_items[i][0]}}</td>
                      <td>{{report_items[i][1]}}</td>
                      <td>{{report_items[i][2]}}</td>
@@ -171,7 +175,7 @@ def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
         	#print r.text
-		time.sleep(20)
+		time.sleep(60)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
 			break
@@ -230,4 +234,4 @@ if __name__ == '__main__':
 
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result_items, teuthology_result_report_items, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	#email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
-	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com", body=email_body)
+	email_results(subject="[Teuthology]  ThinkCloud-SDS-2.0.2-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com", body=email_body)
