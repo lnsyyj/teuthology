@@ -98,7 +98,7 @@ def main(ctx):
 
         load_config()
 
-        job = connection.reserve(timeout=60)
+        job = connection.reserve(timeout=10)
         if job is None:
             continue
 
