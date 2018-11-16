@@ -47,7 +47,7 @@ def base(ctx, config):
             ctx.cluster.run(
                 args=['find', testdir, '-ls',
                       run.Raw(';'),
-                      'rmdir', '--', testdir],
+                      'rm', '-rf', testdir],
                 wait=False,
             ),
         )
