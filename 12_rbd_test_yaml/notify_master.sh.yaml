@@ -12,7 +12,8 @@ tasks:
     client.0:
       - sudo python /root/clear_pools.py
       - sudo sleep 15
-      - sudo /root/ceph-12.2.8/qa/workunits/rbd/yaml_template.sh
+      #- sudo /root/ceph-12.2.8/qa/workunits/rbd/notify_master.sh
+      - sudo /bin/bash -c "export RBD_FEATURES=61; /root/ceph-12.2.8/qa/workunits/rbd/notify_slave.sh & sudo sleep 10 & export RBD_FEATURES=61; /root/ceph-12.2.8/qa/workunits/rbd/notify_master.sh"
 
 overrides:
   selinux:
