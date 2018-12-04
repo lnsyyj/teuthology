@@ -17,7 +17,7 @@ function keep_unlock_machine_plana() {
 	echo ${RESULT}
 	if [ "${RESULT}" = "" ]; then
 		echo "is null"
-		OWNER=$(teuthology-lock --summary | grep teuthology | awk '{print $4}')
+		OWNER=$(teuthology-lock --summary | grep teuthology | grep plana | awk '{print $4}')
 		LEN=${#MACHINES_LIST_PLANA[@]}
 		for ((i=0; i<${LEN}; i++))
 		do
@@ -33,7 +33,7 @@ function keep_unlock_machine_mira() {
 	echo ${RESULT}
 	if [ "${RESULT}" = "" ]; then
 		echo "is null"
-		OWNER=$(teuthology-lock --summary | grep teuthology | awk '{print $4}')
+		OWNER=$(teuthology-lock --summary | grep teuthology | grep mira | awk '{print $4}')
 		LEN=${#MACHINES_LIST_MIRA[@]}
 		for ((i=0; i<${LEN}; i++))
 		do
