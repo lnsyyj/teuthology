@@ -208,10 +208,10 @@ def get_sds_new_patch_list(url):
 if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
 	paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.0-RBD"
-	#paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.0-RADOS"
+	paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.0-RADOS"
 	paddles_ceph_test_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.0-CEPH_TEST"
 	rbd_log_url = "http://10.121.8.93/" + data_time + "-3.0-RBD"
-	#rados_log_url = "http://10.121.8.93/" + data_time + "-3.0-RADOS"
+	rados_log_url = "http://10.121.8.93/" + data_time + "-3.0-RADOS"
 	ceph_test_log_url = "http://10.121.8.93/" + data_time + "-3.0-CEPH_TEST"
 	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/master/"
 	sds_controller_url = "http://10.121.8.100"
@@ -219,18 +219,16 @@ if __name__ == '__main__':
 	sds_build_pkg_name = get_sds_build_info(sds_pkg_url, data_time)
 	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
 	rbd_result_items = get_teuthology_result(paddles_rbd_url, rbd_log_url)
-	#rados_result_items = get_teuthology_result(paddles_rados_url, rados_log_url)
+	rados_result_items = get_teuthology_result(paddles_rados_url, rados_log_url)
 	ceph_test_result_items = get_teuthology_result(paddles_ceph_test_url, ceph_test_log_url)
-	#teuthology_result_items = rbd_result_items + rados_result_items + ceph_test_result_items
-	teuthology_result_items = rbd_result_items + ceph_test_result_items
+	teuthology_result_items = rbd_result_items + rados_result_items + ceph_test_result_items
 	rbd_job_list = ["cli_generic", "diff_continuous", "diff", "import_export", "issue-20295", "journal", "merge_diff", "notify_master", "notify_slave", "permissions", "read-flags", "smalliobench", "test_admin_socket", "test_librbd_api", "test_librbd_python", "test_librbd", "test_lock_fence", "test_rbdmap_RBDMAPFILE", "test_rbd_mirror", "verify_pool"]
-	#rados_job_list = ["load-gen-big", "load-gen-mix", "load-gen-mix-small-long", "load-gen-mix-small", "load-gen-mostlyread", "stress_watch", "test_cache_pool", "test_pool_quota", "test_python", "test_rados_timeouts", "test_rados_tool", "test_tmap_to_omap", "test-upgrade-v11.0.0", "test"]
+	rados_job_list = ["load-gen-big", "load-gen-mix", "load-gen-mix-small-long", "load-gen-mix-small", "load-gen-mostlyread", "test_cache_pool", "test_pool_access", "test_pool_quota", "test_python", "test_rados_timeouts", "test_rados_tool", "test_tmap_to_omap"]
 	ceph_test_job_list = ["ceph_test_async_driver", "ceph_test_async_networkstack", "ceph_test_cls_hello", "ceph_test_cls_journal", "ceph_test_cls_lock", "ceph_test_cls_log", "ceph_test_cls_numops", "ceph_test_cls_rbd", "ceph_test_cls_refcount", "ceph_test_cls_rgw", "ceph_test_filejournal", "ceph_test_keyvaluedb", "ceph_test_libcephfs", "ceph_test_libcephfs_access", "ceph_test_msgr", "ceph_test_rados_api_aio", "ceph_test_rados_api_cmd", "ceph_test_rados_api_c_read_operations", "ceph_test_rados_api_c_write_operations", "ceph_test_rados_api_io", "ceph_test_rados_api_list", "ceph_test_rados_api_lock", "ceph_test_rados_api_misc", "ceph_test_rados_api_pool", "ceph_test_rados_api_service", "ceph_test_rados_api_snapshots", "ceph_test_rados_api_stat", "ceph_test_rados_api_tier", "ceph_test_rados_api_watch_notify", "ceph_test_rados_delete_pools_parallel", "ceph_test_rados_list_parallel", "ceph_test_rados_open_pools_parallel", "ceph_test_rados_striper_api_aio", "ceph_test_rados_striper_api_io", "ceph_test_rados_striper_api_striping", "ceph_test_rados_watch_notify", "ceph_test_rbd_mirror", "ceph_test_stress_watch"]
         rbd_result_report_items = get_teuthology_report_result(paddles_rbd_url, rbd_job_list)
-        #rados_result_report_items = get_teuthology_report_result(paddles_rados_url, rados_job_list)
+        rados_result_report_items = get_teuthology_report_result(paddles_rados_url, rados_job_list)
         ceph_test_result_report_items = get_teuthology_report_result(paddles_ceph_test_url, ceph_test_job_list)
-	#teuthology_result_report_items = rbd_result_report_items + rados_result_report_items + ceph_test_result_report_items
-	teuthology_result_report_items = rbd_result_report_items + ceph_test_result_report_items
+	teuthology_result_report_items = rbd_result_report_items + rados_result_report_items + ceph_test_result_report_items
         
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result_items, teuthology_result_report_items, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	#email_results(subject="[Teuthology]  ThinkCloud Storage 3.0 centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
