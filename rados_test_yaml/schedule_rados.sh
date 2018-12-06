@@ -4,7 +4,7 @@ set -x
 DATA=$(date +%Y%m%d)
 SUITE="RADOS"
 
-FILE_LIST=(load-gen-big.sh.yaml load-gen-mix.sh.yaml load-gen-mix-small-long.sh.yaml load-gen-mix-small.sh.yaml load-gen-mostlyread.sh.yaml stress_watch.sh.yaml test_cache_pool.sh.yaml test_pool_quota.sh.yaml test_python.sh.yaml test_rados_timeouts.sh.yaml test_rados_tool.sh.yaml test_tmap_to_omap.sh.yaml test-upgrade-v11.0.0.sh.yaml test.sh.yaml)
+FILE_LIST=(load-gen-big.sh.yaml load-gen-mix.sh.yaml load-gen-mix-small-long.sh.yaml load-gen-mix-small.sh.yaml load-gen-mostlyread.sh.yaml stress_watch.sh.yaml test_cache_pool.sh.yaml test_pool_quota.sh.yaml test_python.sh.yaml test_rados_timeouts.sh.yaml test_rados_tool.sh.yaml test_tmap_to_omap.sh.yaml)
 #FILE_LIST=(clone.sh.yaml load-gen-big.sh.yaml load-gen-mix.sh.yaml load-gen-mix-small-long.sh.yaml load-gen-mix-small.sh.yaml load-gen-mostlyread.sh.yaml stress_watch.sh.yaml test_alloc_hint.sh.yaml test_cache_pool.sh.yaml test_hang.sh.yaml test_pool_quota.sh.yaml test_python.sh.yaml test_rados_timeouts.sh.yaml test_rados_tool.sh.yaml test.sh.yaml test_tmap_to_omap.sh.yaml test-upgrade-v11.0.0.sh.yaml)
 
 function activate() {
