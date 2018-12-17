@@ -178,6 +178,7 @@ def get_teuthology_result(url, log_url):
 		time.sleep(60)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
+		#if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0:
 			break
 	result = json.loads(r.text)
 	unknown = int(result["results"]["total"]) - int(result["results"]["pass"]) - int(result["results"]["fail"])
@@ -229,9 +230,13 @@ if __name__ == '__main__':
         rbd_result_report_items = get_teuthology_report_result(paddles_rbd_url, rbd_job_list)
         rados_result_report_items = get_teuthology_report_result(paddles_rados_url, rados_job_list)
         ceph_test_result_report_items = get_teuthology_report_result(paddles_ceph_test_url, ceph_test_job_list)
+        print rbd_result_report_items
+        print rados_result_report_items
+        print ceph_test_result_report_items
 	teuthology_result_report_items = rbd_result_report_items + rados_result_report_items + ceph_test_result_report_items
+        print teuthology_result_report_items
         
 
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result_items, teuthology_result_report_items, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
-	#email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
-	email_results(subject="[Teuthology]  ThinkCloud-SDS-2.0.2-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com", body=email_body)
+	email_results(subject="[Teuthology]  ThinkCloud Storage TCS tcs_nfvi_centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
+	#email_results(subject="[Teuthology]  ThinkCloud-SDS-2.0.2-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com", body=email_body)
