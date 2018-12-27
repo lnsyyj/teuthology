@@ -159,6 +159,15 @@ CloudTest Team<br/>
  """
 
 def filled_email_template(email_template, deployments, teuthology_result, report_result, product_version, sds_pkg_url, new_patch_list):
+        print "===="
+        print type(email_template)
+        print type(deployments)
+        print type(teuthology_result)
+        print type(report_result)
+        print type(product_version)
+        print type(sds_pkg_url)
+        print type(new_patch_list)
+        print "===="
 	html = template(email_template, deployments=[(deployments)], product_version=product_version, result_items=teuthology_result, report_items=report_result, build_location=sds_pkg_url + product_version, new_patch_list=[new_patch_list])
 	return html
 
@@ -174,6 +183,7 @@ def email_results(subject, from_, to, body):
 def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
+                #print r.text
 		time.sleep(60)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
@@ -233,4 +243,4 @@ if __name__ == '__main__':
         
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result_items, teuthology_result_report_items, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	#email_results(subject="[Teuthology]  ThinkCloud Storage 3.0 centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
-	email_results(subject="[Teuthology]  ThinkCloud-SDS-3.0.0-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,chenjing22@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com", body=email_body)
+	email_results(subject="[Teuthology]  ThinkCloud-SDS-3.0.0-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com", body=email_body)
