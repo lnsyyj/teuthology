@@ -4,7 +4,7 @@ set -x
 DATA=$(date +%Y%m%d)
 SUITE="3.0-RBD"
 
-FILE_LIST=(cli_generic.sh diff_continuous.sh diff.sh import_export.sh issue-20295.sh journal.sh notify_master.sh notify_slave.sh rbd_groups.sh read-flags.sh test_librbd_api.sh test_librbd_python.sh test_librbd.sh test_lock_fence.sh verify_pool.sh)
+FILE_LIST=(cli_generic.sh.yaml diff_continuous.sh.yaml diff.sh.yaml import_export.sh.yaml issue-20295.sh.yaml journal.sh.yaml notify_master.sh.yaml notify_slave.sh.yaml rbd_groups.sh.yaml read-flags.sh.yaml test_librbd_api.sh.yaml test_librbd_python.sh.yaml test_librbd.sh.yaml test_lock_fence.sh.yaml verify_pool.sh.yaml)
 
 function activate() {
 	source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate
