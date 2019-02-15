@@ -50,11 +50,14 @@ if __name__ == '__main__':
     paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-" + sds_version + "-RBD"
     paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-" + sds_version + "-RADOS"
     paddles_ceph_test_url = "http://10.121.8.93:8080/runs/" + data_time + "-" + sds_version + "-CEPH_TEST"
+    paddles_fs_url = "http://10.121.8.93:8080/runs/" + data_time + "-" + sds_version + "-FS"
 
     rbd_result_items = get_teuthology_result(paddles_rbd_url, data_time)
     rados_result_items = get_teuthology_result(paddles_rados_url, data_time)
     ceph_test_result_items = get_teuthology_result(paddles_ceph_test_url, data_time)
-    teuthology_result_items = rbd_result_items + rados_result_items + ceph_test_result_items
+    fs_result_items = get_teuthology_result(paddles_fs_url, data_time)
+
+    teuthology_result_items = rbd_result_items + rados_result_items + ceph_test_result_items + fs_result_items
     batch_insertion(teuthology_result_items)
 
     #mariadb_connect_test()
