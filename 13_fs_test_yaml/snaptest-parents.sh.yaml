@@ -10,6 +10,7 @@ tasks:
 tasks:
 - exec:
     client.0:
+      - pushd /home/teuthology_cephfs_mount_point/ceph-13.2.4/qa/workunits/fs/snaps/; rmdir 1/.snap/* ; rm -rf 1/ ; rm -rf 2/ ; rm -rf ceph/ ; popd
       - sudo cp -r /root/ceph-13.2.4/qa/workunits/fs/misc /home/teuthology_cephfs_mount_point/ceph-13.2.4/qa/workunits/fs/
       - sudo cp -r /root/ceph-13.2.4/qa/workunits/fs/norstats /home/teuthology_cephfs_mount_point/ceph-13.2.4/qa/workunits/fs/
       - sudo cp -r /root/ceph-13.2.4/qa/workunits/fs/quota /home/teuthology_cephfs_mount_point/ceph-13.2.4/qa/workunits/fs/
