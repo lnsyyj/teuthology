@@ -10,7 +10,7 @@ import requests
 import json
 from datetime import timedelta
 
-mysql_ip = "10.110.144.55"
+mysql_ip = "10.121.9.23"
 mysql_account = "root"
 mysql_password = "1234567890"
 mysql_db_name = "ceph"

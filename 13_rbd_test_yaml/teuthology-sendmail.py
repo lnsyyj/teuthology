@@ -188,6 +188,7 @@ def get_teuthology_result(url, log_url):
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
 			break
+
 	result = json.loads(r.text)
 	unknown = int(result["results"]["total"]) - int(result["results"]["pass"]) - int(result["results"]["fail"])
 	email_items = [(result["name"], result["results"]["pass"], result["results"]["fail"], unknown, log_url)]
@@ -204,7 +205,7 @@ def get_teuthology_report_result(url, job_list):
 
 def get_sds_build_info(url, data_time):
 	r = requests.get(url)
-	pattern = "ThinkCloud-SDS-3.0.0-daily_" + data_time + "_[0-9]*\.tar\.gz"
+	pattern = "ThinkCloud-SDS-3\.0\.0\.[0-9]*-daily_" + data_time + "_[0-9]*\.tar\.gz"
 	match_obj = re.findall(pattern, r.text, flags=0)
 	if match_obj:
 		return match_obj[0]
