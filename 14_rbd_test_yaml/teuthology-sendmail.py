@@ -184,7 +184,7 @@ def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
                 #print r.text
-		#time.sleep(60)
+		time.sleep(60)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
 			break
