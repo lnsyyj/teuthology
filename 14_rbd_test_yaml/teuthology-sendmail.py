@@ -184,7 +184,7 @@ def get_teuthology_result(url, log_url):
 	while True:
 		r = requests.get(url)
                 #print r.text
-		time.sleep(60)
+		#time.sleep(60)
 		s = json.loads(r.text)
 		if int(s["results"]["running"]) == 0 and int(s["results"]["waiting"]) ==0 and int(s["results"]["queued"]) ==0:
 			break
@@ -205,7 +205,7 @@ def get_teuthology_report_result(url, job_list):
 
 def get_sds_build_info(url, data_time):
 	r = requests.get(url)
-	pattern = "ThinkCloud-SDS-3\.0\.0\.[0-9]*-daily_" + data_time + "_[0-9]*\.tar\.gz"
+	pattern = "ThinkCloud-SDS-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*-daily_" + data_time + "_[0-9]*\.tar\.gz"
 	match_obj = re.findall(pattern, r.text, flags=0)
 	if match_obj:
 		return match_obj[0]
@@ -218,6 +218,7 @@ def get_sds_new_patch_list(url):
 
 if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
+	#data_time = "20190724"
 	paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-RBD"
 	paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-RADOS"
 	paddles_ceph_test_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-CEPH_TEST"
@@ -228,8 +229,8 @@ if __name__ == '__main__':
 	ceph_test_log_url = "http://10.121.8.93/" + data_time + "-3.1-CEPH_TEST"
 	fs_test_log_url = "http://10.121.8.93/" + data_time + "-3.1-FS"
 
-	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/master/"
-	sds_controller_url = "http://10.121.8.100"
+	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/ceph_fs_dev2/"
+	sds_controller_url = "http://10.121.8.95"
 
 	sds_build_pkg_name = get_sds_build_info(sds_pkg_url, data_time)
 	sds_new_patch_list = get_sds_new_patch_list(sds_pkg_url + "latest_changes.txt")
