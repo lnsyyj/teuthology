@@ -4,7 +4,7 @@ set -x
 DATA=$(date +%Y%m%d)
 SUITE="3.1-RADOS"
 
-FILE_LIST=(load-gen-big.sh.yaml load-gen-mix.sh.yaml load-gen-mix-small-long.sh.yaml load-gen-mix-small.sh.yaml load-gen-mostlyread.sh.yaml stress_watch.sh.yaml test_cache_pool.sh.yaml test_dedup_tool.sh.yaml test_pool_access.sh.yaml test_pool_quota.sh.yaml test_python.sh.yaml test_rados_timeouts.sh.yaml test_rados_tool.sh.yaml)
+FILE_LIST=(load-gen-big.sh.yaml load-gen-mix.sh.yaml load-gen-mix-small-long.sh.yaml load-gen-mix-small.sh.yaml load-gen-mostlyread.sh.yaml stress_watch.sh.yaml test_cache_pool.sh.yaml test_dedup_tool.sh.yaml test_pool_access.sh.yaml test_pool_quota.sh.yaml test_python.sh.yaml test_rados_tool.sh.yaml)
 
 function activate() {
 	source /home/teuthworker/src/teuthology_master/virtualenv/bin/activate

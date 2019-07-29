@@ -10,13 +10,13 @@ import requests
 import json
 from datetime import timedelta
 
-mysql_ip = "10.110.144.55"
+mysql_ip = "10.121.9.23"
 mysql_account = "root"
 mysql_password = "1234567890"
 mysql_db_name = "ceph"
 mysql_table_name = "teuthology_statistics"
 
-sds_version = "3.0"
+sds_version = "3.1"
 
 
 def mariadb_connect_test():
@@ -45,7 +45,8 @@ def batch_insertion(table):
     conn.close()
 
 if __name__ == '__main__':
-    data_time = time.strftime("%Y%m%d", time.localtime())
+    #data_time = time.strftime("%Y%m%d", time.localtime())
+    data_time = (datetime.datetime.now()+datetime.timedelta(days=-1)).strftime("%Y%m%d")
 
     paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-" + sds_version + "-RBD"
     paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-" + sds_version + "-RADOS"
