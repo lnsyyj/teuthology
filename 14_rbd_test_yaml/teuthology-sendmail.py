@@ -219,15 +219,15 @@ def get_sds_new_patch_list(url):
 if __name__ == '__main__':
 	data_time = time.strftime("%Y%m%d", time.localtime())
 	#data_time = "20190724"
-	paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-RBD"
-	paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-RADOS"
-	paddles_ceph_test_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-CEPH_TEST"
-	paddles_fs_url = "http://10.121.8.93:8080/runs/" + data_time + "-3.1-FS"
+	paddles_rbd_url = "http://10.121.8.93:8080/runs/" + data_time + "-NAS-RBD"
+	paddles_rados_url = "http://10.121.8.93:8080/runs/" + data_time + "-NAS-RADOS"
+	paddles_ceph_test_url = "http://10.121.8.93:8080/runs/" + data_time + "-NAS-CEPH_TEST"
+	paddles_fs_url = "http://10.121.8.93:8080/runs/" + data_time + "-NAS-FS"
 
-	rbd_log_url = "http://10.121.8.93/" + data_time + "-3.1-RBD"
-	rados_log_url = "http://10.121.8.93/" + data_time + "-3.1-RADOS"
-	ceph_test_log_url = "http://10.121.8.93/" + data_time + "-3.1-CEPH_TEST"
-	fs_test_log_url = "http://10.121.8.93/" + data_time + "-3.1-FS"
+	rbd_log_url = "http://10.121.8.93/" + data_time + "-NAS-RBD"
+	rados_log_url = "http://10.121.8.93/" + data_time + "-NAS-RADOS"
+	ceph_test_log_url = "http://10.121.8.93/" + data_time + "-NAS-CEPH_TEST"
+	fs_test_log_url = "http://10.121.8.93/" + data_time + "-NAS-FS"
 
 	sds_pkg_url = "http://10.120.16.212/build/ThinkCloud-SDS/ceph_fs_dev2/"
 	sds_controller_url = "http://10.121.8.95"
@@ -253,4 +253,4 @@ if __name__ == '__main__':
         
 	email_body = filled_email_template(CEPH_TEST_DETAIL_REPORT, sds_controller_url, teuthology_result_items, teuthology_result_report_items, sds_build_pkg_name, sds_pkg_url, sds_new_patch_list)
 	#email_results(subject="[Teuthology]  ThinkCloud Storage 3.1 centos7.5 daily build release", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com", body=email_body)
-	email_results(subject="[Teuthology]  ThinkCloud-SDS-3.1.0-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com,yuwj1@lenovo.com,wangquan6@lenovo.com,jiasm2@lenovo.com,chengjx1@lenovo.com,haozm1@lenovo.com,wenlj1@lenovo.com,wangyj47@lenovo.com", body=email_body)
+	email_results(subject="[Teuthology][NAS] ThinkCloud-SDS-3.1.0-daily Test Report", from_="yujiang2@lenovo.com", to="yujiang2@lenovo.com,sunlei5@lenovo.com,zhangzz6@lenovo.com,zhangyil@lenovo.com,zhouyf6@lenovo.com,houtf1@lenovo.com,renyb2@lenovo.com,magf@lenovo.com,cloudtester2@lenovo.com,houmx1@lenovo.com,xuhe4@lenovo.com,xiegang2@lenovo.com,wugang3@lenovo.com,liujun8@lenovo.com,cuixf1@lenovo.com,lihong5@lenovo.com,sunxw3@lenovo.com,wangqh8@lenovo.com,yuwj1@lenovo.com,wangquan6@lenovo.com,jiasm2@lenovo.com,chengjx1@lenovo.com,haozm1@lenovo.com,wenlj1@lenovo.com,wangyj47@lenovo.com", body=email_body)

@@ -1,9 +1,9 @@
 #!/bin/bash
 set -x
-CEPH_NODE_10="192.168.0.17"
+CEPH_NODE_14="192.168.0.17"
 CEPH_NODE_13="192.168.0.60"
 
-ssh "root@${CEPH_NODE_10}" "/etc/init.d/ceph -a start"
+#ssh "root@${CEPH_NODE_14}" "/etc/init.d/ceph -a start"
 ssh "root@${CEPH_NODE_13}" "/etc/init.d/ceph -a start"
 
 

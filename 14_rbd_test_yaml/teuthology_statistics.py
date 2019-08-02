@@ -16,7 +16,7 @@ mysql_password = "1234567890"
 mysql_db_name = "ceph"
 mysql_table_name = "teuthology_statistics"
 
-sds_version = "3.1"
+sds_version = "NAS"
 
 
 def mariadb_connect_test():
