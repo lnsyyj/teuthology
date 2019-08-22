@@ -1,0 +1,33 @@
+check-locks: false
+use_existing_cluster: true
+
+roles:
+- [mon.a, osd.0, client.0]
+
+tasks:
+- install:
+
+tasks:
+- exec:
+    client.0:
+      - sudo python /root/clear_pools.py
+      - sudo sleep 5
+      - sudo /root/ceph-14.2.1/ceph-14.2.1/build/bin/unittest_mime
+
+overrides:
+  selinux:
+     whitelist:
+      - 'name="cephtest"'
+      - 'dmidecode'
+      - 'comm="logrotate"'
+      - 'comm="idontcare"'
+      - 'comm="sshd"'
+      - 'comm="load_policy"'
+      - 'comm="unix_chkpwd"'
+      - 'comm="systemd-logind"'
+      - 'comm="groupadd"'
+      - 'comm="unix_chkpwd"'
+      - 'comm="tp_fstore_op"'
+
+targets:
+ubuntu@plana003.test.com: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqlVCQnkp3m8FEI52W62ZUY/FokA443m4PCPqYbxR7ejA2IcVCpnHb50X3VMuOqz/o4KDPxahL7u1OP98ziZ+3F1ciK/21xEOKen6RL2WAqg3CT2FWvdhupPwZsW5Cn655Y8J7mjPzoZE7GDi0j/O1hhTw5qiGOrLoKOWAKOcIduITTYcH4XFHxrxjb2WzV+x6OIs5OTs53wuvJyNsoBJelv9vk/EAkjWVG1Ytf9qEP3UMqTZTfnfJrDHWdWB871PTsFlR7P2x7Ca68FpXAU+Mgk4GvBkF2QdL/8cQC4BgFXcjXOTOqO+4+n2VeKLIid5ywI4LsrI2QLAhDGtZ2JF1
